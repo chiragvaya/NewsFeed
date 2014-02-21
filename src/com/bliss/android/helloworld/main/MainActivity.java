@@ -30,7 +30,7 @@ public class MainActivity extends Activity {
         
         
         setContentView(card.toView());
-       
+       // testing
         //LiveCard liveCard = null; 
         //RemoteViews views = new RemoteViews(this.getPackageName(), R.layout.activity_main);
        // liveCard.setViews(views);
