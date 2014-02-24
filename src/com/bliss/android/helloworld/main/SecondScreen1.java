@@ -174,7 +174,7 @@ public class SecondScreen1 extends Activity {
         else
         	return false;
     }
-   
+   // Detect gesture - touchpad
 	
 	private GestureDetector createGestureDetector(Context context) {
 	    GestureDetector gestureDetector = new GestureDetector(context);
