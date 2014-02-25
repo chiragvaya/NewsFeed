@@ -13,6 +13,7 @@ import org.xml.sax.InputSource;
 import com.google.android.glass.app.Card;
 import com.google.android.glass.touchpad.Gesture;
 import com.google.android.glass.touchpad.GestureDetector;
+import com.google.android.glass.touchpad.GestureDetector.BaseListener;
 import com.google.android.glass.widget.CardScrollAdapter;
 import com.google.android.glass.widget.CardScrollView;
 
@@ -31,7 +32,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class SecondScreen1 extends Activity {
-	Intent intent = new Intent(new GestureDetector.BaseListener(){}, Class<MenuActivity> ma);
+	//Intent intent = new Intent(new GestureDetector.BaseListener(){}, Class<MenuActivity> ma);
 	private GestureDetector mGestureDetector;
 	ArrayList<String> s = null;
 	private ArrayList<Card> newscard = new ArrayList<Card>();
@@ -40,7 +41,7 @@ public class SecondScreen1 extends Activity {
 	Card newcard;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		mGestureDetector = createGestureDetector(this);
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_second);
 		System.out.println("Hello hello");
@@ -114,7 +115,7 @@ public class SecondScreen1 extends Activity {
 			Card newcard= new Card(this);
 			newcard.setText(ss.get(i));
 			 newscard.add(newcard);
-			 
+			 mGestureDetector = createGestureDetector(this);
 
 			}
 			
@@ -160,7 +161,7 @@ public class SecondScreen1 extends Activity {
 		   } catch (IOException e) {
 		       return null;
 		     }
-		}*/
+		}
 	
 	public boolean onKeyDown(int keycode1, KeyEvent event) {
         if (keycode1 == KeyEvent.KEYCODE_DPAD_CENTER) {
@@ -173,8 +174,9 @@ public class SecondScreen1 extends Activity {
         
         else
         	return false;
-    }
+    }*/
    // Detect gesture - touchpad
+	
 	
 	private GestureDetector createGestureDetector(Context context) {
 	    GestureDetector gestureDetector = new GestureDetector(context);
@@ -182,15 +184,31 @@ public class SecondScreen1 extends Activity {
 	        gestureDetector.setBaseListener( new GestureDetector.BaseListener() {
 	            @Override
 	            public boolean onGesture(Gesture gesture) {
+	            	System.out.println(gesture.name());
 	                if (gesture == Gesture.TAP) {
-	                	Intent intent = new Intent(this, MenuActivity.class);
-	                	startActivity(intent);
+	                	//intent(null, null);
+	                	System.out.println("This is TAP");
+	                	
 	                    return true;
-	                } else if (gesture == Gesture.TWO_TAP) {
-	                	Intent intent = new Intent(this, MenuActivity.class);
+	                } 
+	                if (gesture == Gesture.LONG_PRESS) {
+	                	Intent intent = new Intent(SecondScreen1.this, MenuActivity.class);
 	                	startActivity(intent);
+	                	System.out.println("This is TAP");
+	                	
 	                    return true;
-	                } else if (gesture == Gesture.SWIPE_RIGHT) {
+	                }
+	                else if (gesture == Gesture.TWO_TAP) {
+	                	//Intent intent = new Intent(this, MenuActivity.class);
+	                	//startActivity(intent);
+	                    return true;
+	                } 
+	                else if (gesture == Gesture.LONG_PRESS) {
+	                	//Intent intent = new Intent(this, MenuActivity.class);
+	                	//startActivity(intent);
+	                    return true;
+	                }
+	                else if (gesture == Gesture.SWIPE_RIGHT) {
 	                    // do something on right (forward) swipe
 	                    return true;
 	                } else if (gesture == Gesture.SWIPE_LEFT) {
@@ -199,6 +217,7 @@ public class SecondScreen1 extends Activity {
 	                }
 	                return false;
 	            }
+
 	        });
 	        gestureDetector.setFingerListener(new GestureDetector.FingerListener() {
 	            @Override
@@ -210,6 +229,7 @@ public class SecondScreen1 extends Activity {
 	            @Override
 	            public boolean onScroll(float displacement, float delta, float velocity) {
 	                // do something on scrolling
+	            return true;
 	            }
 	        });
 	        return gestureDetector;
@@ -228,4 +248,3 @@ public class SecondScreen1 extends Activity {
 	}
 	
     
-}
