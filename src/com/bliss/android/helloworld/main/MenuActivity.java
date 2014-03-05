@@ -7,25 +7,40 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import com.google.api.services.mirror.model.MenuItem;
-import com.google.api.services.mirror.Mirror;
 
 public class MenuActivity extends Activity {
+	String data;
+	private TextToSpeech mSpeech;
 	List<MenuItem> menus = new ArrayList<MenuItem>();
+	public void onCreate(Bundle savedInstanceState) {
+	    super.onCreate(savedInstanceState);
+	    //data = getIntent().getExtras().getString("message");
+	    //System.out.println(data);
+	    mSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+	    	
+	        @Override
+	        public void onInit(int status) {
+	            // Do nothing.
+	        }
+	    });
+	}
 	
 	public Object json(int menuid)
 	{
 		JSONObject obj = new JSONObject();
 		try {
 			System.out.println("goes into try of json");
-			obj.put("text", "Hello World");
-			obj.put("menuItems", new JSONObject().put("action", "OPEN_URI"));
-			obj.put("menuItems", new JSONObject().put("payload", "https://developers.google.com/glass/develop/mirror/menu-items"));
+			obj.put("text", data);
+			obj.put("menuItems", new JSONObject().put("action", "READ_ALOUD"));
+			//obj.put("menuItems", new JSONObject().put("payload", "https://developers.google.com/glass/develop/mirror/menu-items"));
 			System.out.println(obj);
+			//System.out.println(data);
+			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -52,8 +67,8 @@ public class MenuActivity extends Activity {
         switch (item.getItemId()) {
             case R.id.read_aloud_menu_item:
             	System.out.println("goes itno read aloud case");
-            	menus.add(new MenuItem().setAction("READ_ALOUD").setPayload(payload));
-                //json(item.getItemId());
+            	//mSpeech.speak(json(item.getItemId()).toString(), TextToSpeech.QUEUE_FLUSH, null);
+            	mSpeech.speak("Hello how are you", TextToSpeech.QUEUE_FLUSH, null);
                 System.out.println(item.getItemId());
                 
                 return true;
@@ -66,5 +81,10 @@ public class MenuActivity extends Activity {
     public void onOptionsMenuClosed(Menu menu) {
         // Nothing else to do, closing the activity.
         finish();
+    }
+    public void onDestroy() {
+        mSpeech.shutdown();
+        mSpeech = null;
+        super.onDestroy();
     }
 }

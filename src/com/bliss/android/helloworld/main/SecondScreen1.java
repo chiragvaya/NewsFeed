@@ -6,35 +6,39 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import com.google.android.glass.app.Card;
-import com.google.android.glass.touchpad.Gesture;
-import com.google.android.glass.touchpad.GestureDetector;
-import com.google.android.glass.touchpad.GestureDetector.BaseListener;
-import com.google.android.glass.widget.CardScrollAdapter;
-import com.google.android.glass.widget.CardScrollView;
-
-import android.os.AsyncTask;
-import android.os.Bundle;
-
-import org.w3c.dom.Element;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-import android.view.KeyEvent;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.glass.app.Card;
+import com.google.android.glass.touchpad.Gesture;
+import com.google.android.glass.touchpad.GestureDetector;
+import com.google.android.glass.widget.CardScrollAdapter;
+import com.google.android.glass.widget.CardScrollView;
+import com.google.api.services.mirror.model.TimelineItem;
+import com.google.api.services.mirror.model.MenuItem;
+
 public class SecondScreen1 extends Activity {
+	String url;
+	String messageText;
+	int size;
 	//Intent intent = new Intent(new GestureDetector.BaseListener(){}, Class<MenuActivity> ma);
 	private GestureDetector mGestureDetector;
 	ArrayList<String> s = null;
+	Bundle intentfromMain;
+	int getSource;
+	String getSource11;
+	String sourcename;
 	private ArrayList<Card> newscard = new ArrayList<Card>();
     private ArrayList<String> newstext = new ArrayList<String>();
 	//private ArrayList<Card> headlines = new ArrayList<Card>();
@@ -45,6 +49,13 @@ public class SecondScreen1 extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_second);
 		System.out.println("Hello hello");
+		intentfromMain = getIntent().getExtras();
+		getSource = intentfromMain.getInt("sourcename");
+		getSource11= intentfromMain.getString("sourcename11");
+		System.out.println(getSource);
+		System.out.println("Subscribed to "+getSource11);
+		size=intentfromMain.getInt("size");
+		 
 		//headlines = new ArrayList();
 		//ArrayList<String> links = new ArrayList<String>();
 		//android.os.Debug.waitForDebugger();
@@ -52,7 +63,26 @@ public class SecondScreen1 extends Activity {
 		System.out.println("post task executed");
 		ArrayList<String> s = null;
 		System.out.println("try 1 executed");
+		if(getSource==0)
+		{
 		post.execute("http://feeds.pcworld.com/pcworld/latestnews");
+		url="http://feeds.pcworld.com/pcworld/latestnews";
+		sourcename="pcworld";
+		}
+		if(getSource==1)
+		{
+			post.execute("http://feeds.feedburner.com/TechCrunch/");
+			url="http://feeds.feedburner.com/TechCrunch/";
+			sourcename="techcrunch";
+			
+		}
+		if(getSource==size)
+		{
+			Intent addsourceintent = new Intent(SecondScreen1.this, addsourcesactivity.class);
+			
+			startActivity(addsourceintent);
+			
+		}
 		//System.out.println(s.get(2));
 		
 		CardScrollView csvCardsView = new CardScrollView(this);
@@ -72,7 +102,7 @@ public class SecondScreen1 extends Activity {
 				   Document doc = null;
 				   try{
 					   System.out.println("Hello hello 1");   
-	            URL url_link = new URL("http://feeds.pcworld.com/pcworld/latestnews");
+	            URL url_link = new URL(url);
 	            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 	            DocumentBuilder db = dbf.newDocumentBuilder();
 	            doc = db.parse(new InputSource(url_link.openStream()));
@@ -116,6 +146,7 @@ public class SecondScreen1 extends Activity {
 			newcard.setText(ss.get(i));
 			 newscard.add(newcard);
 			 mGestureDetector = createGestureDetector(this);
+			 messageText=ss.get(i);
 
 			}
 			
@@ -193,8 +224,15 @@ public class SecondScreen1 extends Activity {
 	                } 
 	                if (gesture == Gesture.LONG_PRESS) {
 	                	Intent intent = new Intent(SecondScreen1.this, MenuActivity.class);
+	                	//intent.putExtra("message", messageText);
 	                	startActivity(intent);
-	                	System.out.println("This is TAP");
+	                	/*MenuActivity1 menus = new MenuActivity1()
+	                	  //.addNavigateAction()
+	                	  .addReadAloudAction(messageText);
+	                	 
+	                	TimelineItem timelineItem = new TimelineItem()
+	                	  .setMenuItems(menus.getMenus());
+	                	System.out.println("This is TAP");*/
 	                	
 	                    return true;
 	                }
@@ -206,7 +244,7 @@ public class SecondScreen1 extends Activity {
 	                else if (gesture == Gesture.LONG_PRESS) {
 	                	//Intent intent = new Intent(this, MenuActivity.class);
 	                	//startActivity(intent);
-	                    return true;
+	                    return true;	
 	                }
 	                else if (gesture == Gesture.SWIPE_RIGHT) {
 	                    // do something on right (forward) swipe
