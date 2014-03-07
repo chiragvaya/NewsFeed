@@ -36,60 +36,65 @@ public class SecondScreen1 extends Activity {
 	private GestureDetector mGestureDetector;
 	ArrayList<String> s = null;
 	Bundle intentfromMain;
-	int getSource;
-	String getSource11;
+	String getSource;
+	//String subscribesource;
 	String sourcename;
 	private ArrayList<Card> newscard = new ArrayList<Card>();
     private ArrayList<String> newstext = new ArrayList<String>();
-	//private ArrayList<Card> headlines = new ArrayList<Card>();
 	Card newcard;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.activity_second);
 		System.out.println("Hello hello");
+		
 		intentfromMain = getIntent().getExtras();
-		getSource = intentfromMain.getInt("sourcename");
-		getSource11= intentfromMain.getString("sourcename11");
+		getSource = intentfromMain.getString("sourcename");
 		System.out.println(getSource);
-		System.out.println("Subscribed to "+getSource11);
-		size=intentfromMain.getInt("size");
-		 
-		//headlines = new ArrayList();
-		//ArrayList<String> links = new ArrayList<String>();
+		/*if(getSource.equals("add"))
+		{
+			System.out.println("from if "+getSource);
+			Intent addsourceintent = new Intent(SecondScreen1.this, addsourcesactivity.class);
+			
+			startActivity(addsourceintent);
+			finish();
+			
+		}*/
+		//else
+		//{
+			
+		//size=intentfromMain.getInt("size");
+		System.out.println(getSource);
+	
 		//android.os.Debug.waitForDebugger();
 		PostTask post=new PostTask();
 		System.out.println("post task executed");
 		ArrayList<String> s = null;
 		System.out.println("try 1 executed");
-		if(getSource==0)
+		if(getSource=="PC World")
 		{
 		post.execute("http://feeds.pcworld.com/pcworld/latestnews");
 		url="http://feeds.pcworld.com/pcworld/latestnews";
 		sourcename="pcworld";
 		}
-		if(getSource==1)
+		else if(getSource=="Tech Crunch")
 		{
 			post.execute("http://feeds.feedburner.com/TechCrunch/");
 			url="http://feeds.feedburner.com/TechCrunch/";
 			sourcename="techcrunch";
 			
 		}
-		if(getSource==size)
-		{
-			Intent addsourceintent = new Intent(SecondScreen1.this, addsourcesactivity.class);
-			
-			startActivity(addsourceintent);
-			
-		}
-		//System.out.println(s.get(2));
-		
+	
 		CardScrollView csvCardsView = new CardScrollView(this);
         csaAdapter cvAdapter = new csaAdapter();
         csvCardsView.setAdapter(cvAdapter);
         csvCardsView.activate();
         setContentView(csvCardsView);
+	
+//}
+	
 	}
 		class PostTask extends AsyncTask<String, Integer, ArrayList<String>> {
 			
@@ -236,10 +241,11 @@ public class SecondScreen1 extends Activity {
 	                	
 	                    return true;
 	                }
-	                else if (gesture == Gesture.TWO_TAP) {
+	                else if (gesture == Gesture.SWIPE_DOWN) {
 	                	//Intent intent = new Intent(this, MenuActivity.class);
 	                	//startActivity(intent);
-	                    return true;
+	                    finish();
+	                	return true;
 	                } 
 	                else if (gesture == Gesture.LONG_PRESS) {
 	                	//Intent intent = new Intent(this, MenuActivity.class);
@@ -283,6 +289,12 @@ public class SecondScreen1 extends Activity {
 	        }
 	        return false;
 	    }
+	    public void onDestroy() {
+		       //sourceCard.shutdown();
+		        super.onDestroy();
+		       
+		       
+		    }
 	}
 	
     

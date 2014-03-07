@@ -4,6 +4,7 @@ package com.bliss.android.helloworld.main;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 import android.app.Activity;
 import android.content.Context;
@@ -28,17 +29,65 @@ public class MainActivity extends Activity {
 	CardScrollView csvCardsView;
 	private GestureDetector mGestureDetector;
 	String identifysource;
+	String selectedcard;
 	int cardindex;
+	//String subscribesource;
+	Bundle intentfromaddSources;
+	Boolean sourceexists;
+	Boolean checkadd;
 	private static ArrayList<Card> sourceCard = new ArrayList<Card>();
-	private ArrayList<String> sourceText = new ArrayList<String>(Arrays.asList("PCWorld", "TechCrunch"));
+	private ArrayList<String> sourceText = new ArrayList<String>();
+	private ArrayList<String> subscribesource = new ArrayList<String>();
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-      
-      // Card addsources = new Card(this);
-     //  addsources.setText("Add Sources");
+        
+        
+       
+        System.out.println(subscribesource);
+        //sourceText.add("add");
+       
+        System.out.println(subscribesource);
+       
+        
+     	   //System.out.println(checkadd);
+     	  //System.out.println("Contents of array:"+sourceText);
+     	
+     	 /*  
+        Card addsourcecard=new Card(this);
+        addsourcecard.setText(sourceText.get(subscribesource.size()-1));
+     	 sourceCard.add(addsourcecard);
+     	
+        
+        checkadd=subscribesource.contains("add");
+        if(checkadd==false)*/
+        	subscribesource.add("add");
+        Card addsourcecard=new Card(this);
+        addsourcecard.setText("add");
+        sourceCard.add(addsourcecard);
+        
+        mGestureDetector = createGestureDetector(this);
+     	 //sourceCard.add(addsourcecard);
+        System.out.println(subscribesource);
+        /*
+        if (!(getIntent().getExtras().getStringArrayList("subscribesource")== null))
+        		{
+     	
+        		}*/
+     	
+     	//System.out.println("Contents of array after add:"+sourceText);
+        
+        /*
+     	sourceexists = sourceText.contains(subscribesource);
+        
+        if(sourceexists.equals(true))
+        	sourceText.remove(subscribesource);
+        else
+        	sourceText.addFirst(subscribesource);
+        	*/
+     // addsources = new Card(this);
+      //addsources.setText("Add Sources");
        
        
        System.out.println(this);
@@ -51,7 +100,7 @@ public class MainActivity extends Activity {
        // LiveCard liveCard; 
         //Intent intent = new Intent(this, SecondActivity.class);
        // liveCard.setAction(PendingIntent.getActivity(this, 0, intent, 0));
-       createcards();
+       
        csvCardsView = new CardScrollView(this);
        csaAdapter cvAdapter = new csaAdapter();
        csvCardsView.setAdapter(cvAdapter);
@@ -60,30 +109,62 @@ public class MainActivity extends Activity {
        //cvAdapter.getView(position, csvCardsView, );
       cardindex=csvCardsView.getSelectedItemPosition();
       mGestureDetector = createGestureDetector(this);
+  	 
+  	 
+       
       
        //cardindex=cvAdapter.findItemPosition(sourceCard);
         System.out.println("after cardscroll"+cardindex);
         
     }
 	
+	protected void onStop()
+	{
+		super.onStop();
+		System.out.println("onStop");
+		
+	}
+	protected void onRestart()
+	{
+		super.onRestart();
+		sourceCard.clear();
+		subscribesource.clear();
+		Card addsourcecard=new Card(this);
+        addsourcecard.setText("add");
+     	 sourceCard.add(addsourcecard);
+		createcards();
+		
+		intentfromaddSources = getIntent().getExtras();
+        subscribesource=intentfromaddSources.getStringArrayList("subscribesource"); 
+        System.out.println("You are here 3");
+		
+		csvCardsView = new CardScrollView(this);
+	       csaAdapter cvAdapter = new csaAdapter();
+	       csvCardsView.setAdapter(cvAdapter);
+	       csvCardsView.activate();
+	       setContentView(csvCardsView);
+	       //cvAdapter.getView(position, csvCardsView, );
+	      cardindex=csvCardsView.getSelectedItemPosition();
+	      mGestureDetector = createGestureDetector(this);
+		
+	}
+	
 	private void createcards()
 	{
-	 for(int i=0;i<sourceText.size();i++)
+	 for(int i=0;i<subscribesource.size();i++)
      {
-  	   System.out.println("whats up");
+  	   System.out.println("create cards called");
       Card card = new Card(this);
-      identifysource=sourceText.get(i);
+      identifysource=subscribesource.get(i);
       card.setText(identifysource);
       sourceCard.add(card);
       //card.setFootnote("blisstering");
       //setContentView(card.toView());
  
      }
-	 Card addsourcecard=new Card(this);
-	 addsourcecard.setText("Add Sources");
-	 sourceCard.add(addsourcecard);
-	 
 	}
+
+	
 	/*public boolean onKeyDown(int keycode, KeyEvent event) {
         if (keycode == KeyEvent.KEYCODE_DPAD_CENTER) {
         	Log.e("Msg","What you have to print");
@@ -159,10 +240,7 @@ public class MainActivity extends Activity {
         {
             return sourceCard.get(position).toView();
         }
-        
-    }
-	
-	
+     }
 	
 	private GestureDetector createGestureDetector(Context context) {
 	    GestureDetector gestureDetector = new GestureDetector(context);
@@ -174,6 +252,25 @@ public class MainActivity extends Activity {
 	                if (gesture == Gesture.TAP) {
 	                	//intent(null, null);
 	                	System.out.println("This is ");
+	                	System.out.println(subscribesource);
+	                	
+	                	System.out.println("Inside long press");
+	                	selectedcard=subscribesource.get(csvCardsView.getSelectedItemPosition());
+	                	if(selectedcard.equals("add"))
+	                	{
+	                		System.out.println("Inside if of tap");
+	                		Intent intentforadd = new Intent(MainActivity.this,addsourcesactivity.class);
+	                		startActivity(intentforadd);
+	                	}
+	                	else
+	                	{
+	                		System.out.println("Inside else of tap");
+	                		Intent intent = new Intent(MainActivity.this, SecondScreen1.class);
+	                	intent.putExtra("sourcename",selectedcard);
+	                	intent.putExtra("size",subscribesource.size());
+	                	System.out.println(subscribesource.get(csvCardsView.getSelectedItemPosition()).toString());
+	                	startActivity(intent);
+	                	}
 	                	
 	                    return true;
 	                } 
@@ -181,17 +278,31 @@ public class MainActivity extends Activity {
 	                	//Intent intent = new Intent(SecondScreen1.this, MenuActivity1.class);
 	                	//intent.putExtra("message", messageText);
 	                	//startActivity(intent);
-	                	Intent intent = new Intent(MainActivity.this, SecondScreen1.class);
-	                	csvCardsView.getSelectedItemPosition();
-	                	intent.putExtra("sourcename",csvCardsView.getSelectedItemPosition());
-	                	intent.putExtra("size",sourceText.size() );
-	                	startActivity(intent);
 	                	
+	                	csvCardsView.getSelectedItemPosition();
+	                	System.out.println("Inside long press");
+	                	System.out.println(subscribesource);
+	                	selectedcard=subscribesource.get(csvCardsView.getSelectedItemPosition());
+	                	if(selectedcard.equals("add"))
+	                	{
+	                		System.out.println("Inside if of long press");
+	                		Intent intentforadd = new Intent(MainActivity.this,addsourcesactivity.class);
+	                		startActivity(intentforadd);
+	                	}
+	                	else
+	                	{
+	                		System.out.println("Inside else of long press");
+	                		Intent intent = new Intent(MainActivity.this, SecondScreen1.class);
+	                	intent.putExtra("sourcename",selectedcard);
+	                	intent.putExtra("size",subscribesource.size());
+	                	System.out.println(subscribesource.get(csvCardsView.getSelectedItemPosition()).toString());
+	                	startActivity(intent);
+	                	}
 	                	System.out.println("This is long press of main");
 	                	
 	                    return true;
 	                }
-	                else if (gesture == Gesture.TWO_TAP) {
+	                else if (gesture == Gesture.SWIPE_DOWN) {
 	                	//Intent intent = new Intent(this, MenuActivity.class);
 	                	//startActivity(intent);
 	                    return true;
@@ -242,8 +353,8 @@ public class MainActivity extends Activity {
 	    public void onDestroy() {
 	       //sourceCard.shutdown();
 	        super.onDestroy();
-	        sourceCard.clear();
-	        sourceText.clear();
+	        
+	       
 	    }
 }
    

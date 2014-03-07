@@ -21,13 +21,17 @@ public class addsourcesactivity extends Activity
 {
 	private GestureDetector mGestureDetector;
 	CardScrollView csvCardsView;
+	Bundle sourcesadded;
     private ArrayList<Card> mlcCards = new ArrayList<Card>();
     private ArrayList<String> mlsText = new ArrayList<String>(Arrays.asList("PC World", "Tech Crunch","NPR", "BBC"));
-
+    private ArrayList<String> subscribeSource = new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        System.out.println("Hello hello 1");
+        
+        
 
         for (int i = 0; i < mlsText.size(); i++)
         {
@@ -37,7 +41,8 @@ public class addsourcesactivity extends Activity
             mlcCards.add(newCard);
             mGestureDetector = createGestureDetector(this);
         }
-
+        
+        
         csvCardsView = new CardScrollView(this);
         csaAdapter cvAdapter = new csaAdapter();
         csvCardsView.setAdapter(cvAdapter);
@@ -46,6 +51,16 @@ public class addsourcesactivity extends Activity
         
     }
 
+    protected void onRestart()
+    {
+    	super.onRestart();
+    
+    	System.out.println("enters if of onRestart addsourcesactivity");
+    sourcesadded = getIntent().getExtras();
+    subscribeSource = sourcesadded.getStringArrayList("subscribesource");
+    
+    }
+    
     private class csaAdapter extends CardScrollAdapter
     {
         @Override
@@ -93,6 +108,7 @@ public class addsourcesactivity extends Activity
 	                    return true;
 	                } 
 	                if (gesture == Gesture.LONG_PRESS) {
+	                	
 	                	Intent intent = new Intent(addsourcesactivity.this, addSourcesMenu.class);
 	                	intent.putExtra("sourceindex", csvCardsView.getSelectedItemPosition());
 	                	startActivity(intent);
@@ -100,7 +116,11 @@ public class addsourcesactivity extends Activity
 	                	
 	                    return true;
 	                }
-	                
+	                if(gesture == Gesture.SWIPE_DOWN)
+	                {
+	                	finish();
+	                	}
+	                	
 	                
 	                return false;
 	            }
@@ -132,7 +152,15 @@ public class addsourcesactivity extends Activity
 	        }
 	        return false;
 	    }
-
+	    public void onDestroy() {
+		       //sourceCard.shutdown();
+	    	Intent i = new Intent(addsourcesactivity.this, MainActivity.class);
+	    	i.putExtra("subscribesource",subscribeSource);
+	    	startActivity(i);
+		        super.onDestroy();
+		       
+		       
+		    }
     
     
 }
