@@ -63,13 +63,13 @@ public class MainActivity extends Activity {
         
         checkadd=subscribesource.contains("add");
         if(checkadd==false)*/
+        if(subscribesource.contains("Add Sources")==false)
+        {
         	subscribesource.add("Add Sources");
         Card addsourcecard=new Card(this);
         addsourcecard.setText("Add Sources");
-       
-        
         sourceCard.add(addsourcecard);
-        
+        }
         mGestureDetector = createGestureDetector(this);
      	 //sourceCard.add(addsourcecard);
         System.out.println(subscribesource);
@@ -264,7 +264,7 @@ public class MainActivity extends Activity {
 	                	System.out.println("This is ");
 	                	System.out.println(subscribesource);
 	                	
-	                	System.out.println("Inside long press");
+	                	System.out.println("Inside tap");
 	                	selectedcard=subscribesource.get(csvCardsView.getSelectedItemPosition());
 	                	System.out.println(selectedcard);
 	                	if(selectedcard.equals("Add Sources"))
@@ -303,6 +303,7 @@ public class MainActivity extends Activity {
 	                	}
 	                	else
 	                	{
+	                		selectedcard=subscribesource.get(csvCardsView.getSelectedItemPosition()-1);
 	                		System.out.println("Inside else of long press");
 	                		Intent intent = new Intent(MainActivity.this, SecondScreen1.class);
 	                	intent.putExtra("sourcename",selectedcard);
