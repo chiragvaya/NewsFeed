@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -37,7 +38,7 @@ public class MainActivity extends Activity {
 	Boolean checkadd;
 	private static ArrayList<Card> sourceCard = new ArrayList<Card>();
 	private ArrayList<String> sourceText = new ArrayList<String>();
-	private ArrayList<String> subscribesource = new ArrayList<String>();
+	public static ArrayList<String> subscribesource = new ArrayList<String>();
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -118,26 +119,25 @@ public class MainActivity extends Activity {
         
     }
 	
-	protected void onStop()
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) 
 	{
-		super.onStop();
-		System.out.println("onStop");
+		if(requestCode==2)
+		{
+			if(resultCode == RESULT_OK){  
 		
-	}
-	protected void onRestart()
-	{
-		super.onRestart();
-		sourceCard.clear();
-		subscribesource.clear();
-		Card addsourcecard=new Card(this);
+		
+		/*Card addsourcecard=new Card(this);
         addsourcecard.setText("add");
-     	 sourceCard.add(addsourcecard);
-		createcards();
+     	 sourceCard.add(addsourcecard);*/
 		
-		intentfromaddSources = getIntent().getExtras();
-        subscribesource=intentfromaddSources.getStringArrayList("subscribesource"); 
-        System.out.println("You are here 3");
 		
+		
+        MainActivity.subscribesource=data.getStringArrayListExtra("subscribesource"); 
+        System.out.println("sources in onactivityresult"+subscribesource);
+        //saveArray(null, subscribesource, null);
+        
+        createcards();
 		csvCardsView = new CardScrollView(this);
 	       csaAdapter cvAdapter = new csaAdapter();
 	       csvCardsView.setAdapter(cvAdapter);
@@ -146,8 +146,13 @@ public class MainActivity extends Activity {
 	       //cvAdapter.getView(position, csvCardsView, );
 	      cardindex=csvCardsView.getSelectedItemPosition();
 	      mGestureDetector = createGestureDetector(this);
-		
+		}
+			if (resultCode == RESULT_CANCELED) {    
+		         //Write your code if there's no result
+		     }
+		}
 	}
+	
 	
 	private void createcards()
 	{
@@ -209,6 +214,9 @@ public class MainActivity extends Activity {
 		return true;
 		
     }*/
+	
+	
+	
 	
 	private static class csaAdapter extends CardScrollAdapter
     {
@@ -283,11 +291,12 @@ public class MainActivity extends Activity {
 	                	System.out.println("Inside long press");
 	                	System.out.println(subscribesource);
 	                	selectedcard=subscribesource.get(csvCardsView.getSelectedItemPosition());
+	                	System.out.println(selectedcard);
 	                	if(selectedcard.equals("add"))
 	                	{
 	                		System.out.println("Inside if of long press");
 	                		Intent intentforadd = new Intent(MainActivity.this,addsourcesactivity.class);
-	                		startActivity(intentforadd);
+	                		startActivityForResult(intentforadd,2);
 	                	}
 	                	else
 	                	{

@@ -3,6 +3,7 @@ package com.bliss.android.helloworld.main;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,21 +17,29 @@ import com.google.android.glass.widget.CardScrollView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 
 public class addsourcesactivity extends Activity
 {
 	private GestureDetector mGestureDetector;
 	CardScrollView csvCardsView;
 	Bundle sourcesadded;
+	String[] arraylistToArray = new String[4];
     private ArrayList<Card> mlcCards = new ArrayList<Card>();
     private ArrayList<String> mlsText = new ArrayList<String>(Arrays.asList("PC World", "Tech Crunch","NPR", "BBC"));
-    private ArrayList<String> subscribeSource = new ArrayList<String>();
+    
+    String source;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         System.out.println("Hello hello 1");
         
+        
+
         
 
         for (int i = 0; i < mlsText.size(); i++)
@@ -51,15 +60,45 @@ public class addsourcesactivity extends Activity
         
     }
 
-    protected void onRestart()
-    {
-    	super.onRestart();
     
-    	System.out.println("enters if of onRestart addsourcesactivity");
-    sourcesadded = getIntent().getExtras();
-    subscribeSource = sourcesadded.getStringArrayList("subscribesource");
+    
+    
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+    	 if (requestCode == 1)
+    	 {
+    		 if(resultCode==RESULT_OK)
+    		 {
+    		 source = data.getStringExtra("subscribesource");
+    		 arraylistToArray = MainActivity.subscribesource.toArray(arraylistToArray);
+    		
+    		 if(MainActivity.subscribesource.contains(source)==false)
+    		 {
+    			 MainActivity.subscribesource.add(source);
+    			
+    		 }
+    		 else
+    		 {
+    			 MainActivity.subscribesource.remove(source);
+    			
+    		 }
+    System.out.println("you are at addsourcesactivity" +MainActivity.subscribesource);	 
+    		 }
+    		 if (resultCode == RESULT_CANCELED) {    
+        //Write your code if there's no result
+    }
+    		 Intent i = new Intent();
+ 	    	i.putExtra("subscribesource",MainActivity.subscribesource);
+ 	    	setResult(RESULT_OK, i); 
+    	 }
+    	 mGestureDetector = createGestureDetector(this);
+
     
     }
+    
+    
+    
+        
     
     private class csaAdapter extends CardScrollAdapter
     {
@@ -111,13 +150,16 @@ public class addsourcesactivity extends Activity
 	                	
 	                	Intent intent = new Intent(addsourcesactivity.this, addSourcesMenu.class);
 	                	intent.putExtra("sourceindex", csvCardsView.getSelectedItemPosition());
-	                	startActivity(intent);
+	                	startActivityForResult(intent, 1);
 	                	
 	                	
 	                    return true;
 	                }
 	                if(gesture == Gesture.SWIPE_DOWN)
 	                {
+	                	System.out.println("swipe down");
+	                	
+	                	
 	                	finish();
 	                	}
 	                	
@@ -154,9 +196,7 @@ public class addsourcesactivity extends Activity
 	    }
 	    public void onDestroy() {
 		       //sourceCard.shutdown();
-	    	Intent i = new Intent(addsourcesactivity.this, MainActivity.class);
-	    	i.putExtra("subscribesource",subscribeSource);
-	    	startActivity(i);
+	    	
 		        super.onDestroy();
 		       
 		       
