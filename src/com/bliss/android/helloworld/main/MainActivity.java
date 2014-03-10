@@ -63,9 +63,11 @@ public class MainActivity extends Activity {
         
         checkadd=subscribesource.contains("add");
         if(checkadd==false)*/
-        	subscribesource.add("add");
+        	subscribesource.add("Add Sources");
         Card addsourcecard=new Card(this);
-        addsourcecard.setText("add");
+        addsourcecard.setText("Add Sources");
+       
+        
         sourceCard.add(addsourcecard);
         
         mGestureDetector = createGestureDetector(this);
@@ -264,7 +266,8 @@ public class MainActivity extends Activity {
 	                	
 	                	System.out.println("Inside long press");
 	                	selectedcard=subscribesource.get(csvCardsView.getSelectedItemPosition());
-	                	if(selectedcard.equals("add"))
+	                	System.out.println(selectedcard);
+	                	if(selectedcard.equals("Add Sources"))
 	                	{
 	                		System.out.println("Inside if of tap");
 	                		Intent intentforadd = new Intent(MainActivity.this,addsourcesactivity.class);
@@ -291,8 +294,8 @@ public class MainActivity extends Activity {
 	                	System.out.println("Inside long press");
 	                	System.out.println(subscribesource);
 	                	selectedcard=subscribesource.get(csvCardsView.getSelectedItemPosition());
-	                	System.out.println(selectedcard);
-	                	if(selectedcard.equals("add"))
+	                	System.out.println("in long press of main selected"+selectedcard);
+	                	if(selectedcard.equals("Add Sources"))
 	                	{
 	                		System.out.println("Inside if of long press");
 	                		Intent intentforadd = new Intent(MainActivity.this,addsourcesactivity.class);

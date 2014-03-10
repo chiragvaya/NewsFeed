@@ -73,19 +73,36 @@ public class SecondScreen1 extends Activity {
 		System.out.println("post task executed");
 		ArrayList<String> s = null;
 		System.out.println("try 1 executed");
-		if(getSource=="PC World")
+		if(getSource.equals("PC World"))
 		{
 		post.execute("http://feeds.pcworld.com/pcworld/latestnews");
 		url="http://feeds.pcworld.com/pcworld/latestnews";
 		sourcename="pcworld";
 		}
-		else if(getSource=="Tech Crunch")
+		else if(getSource.equals("Tech Crunch"))
 		{
 			post.execute("http://feeds.feedburner.com/TechCrunch/");
 			url="http://feeds.feedburner.com/TechCrunch/";
 			sourcename="techcrunch";
 			
 		}
+		
+		else if(getSource.equals("NPR"))
+		{
+			post.execute("http://www.npr.org/rss/rss.php");
+			url="http://www.npr.org/rss/rss.php";
+			sourcename="NPR";
+			
+		}
+		
+		else if(getSource.equals("BBC"))
+		{
+			post.execute("http://feeds.bbci.co.uk/news/rss.xml");
+			url="http://feeds.bbci.co.uk/news/rss.xml";
+			sourcename="BBC";
+			
+		}
+		
 	
 		CardScrollView csvCardsView = new CardScrollView(this);
         csaAdapter cvAdapter = new csaAdapter();
