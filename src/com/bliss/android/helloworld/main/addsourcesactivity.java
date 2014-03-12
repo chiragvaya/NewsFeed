@@ -37,7 +37,8 @@ public class addsourcesactivity extends Activity
     String source;
     int sPrefsSize=0;
     Context context;
-    
+    String select;
+    int a;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -60,6 +61,7 @@ public class addsourcesactivity extends Activity
         csvCardsView.setAdapter(cvAdapter);
         csvCardsView.activate();
         setContentView(csvCardsView);
+        
         
     }
 
@@ -144,11 +146,25 @@ public class addsourcesactivity extends Activity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+    	
         
-        inflater.inflate(R.menu.sourcesmenu, menu);
-    
         return true;
+    }
+    
+   public boolean onPrepareOptionsMenu(Menu menu){
+	   menu.clear();
+	   MenuInflater inflater = getMenuInflater();
+	   sPrefs= getSharedPreferences(MainActivity.PREF_NAME,Activity.MODE_PRIVATE);
+   	SharedPreferences.Editor sEdit=sPrefs.edit();
+   	select = mlsText.get(csvCardsView.getSelectedItemPosition());
+   	System.out.println("inside the inflator"+select);
+   	System.out.println(sPrefs.getString(select,"0").equals("0"));
+   	if(sPrefs.getString(select,"0").equals("0"))
+   		a=R.menu.sourcesmenu;
+   	else
+   		a=R.menu.sourcesmenu1;
+   	inflater.inflate(a, menu);
+    	return true;
     }
 
     @Override
@@ -167,23 +183,14 @@ public class addsourcesactivity extends Activity
     	SharedPreferences.Editor sEdit=sPrefs.edit();
     	selectedcard=mlsText.get(csvCardsView.getSelectedItemPosition());
     	System.out.println(selectedcard);
-    	if(sPrefs.contains(selectedcard))
-    	{
-    		System.out.println("Inside if of sfrefs");
-    	sEdit.remove(selectedcard);
-    	sEdit.commit();
-    	sEdit.putInt("size",sPrefs.getAll().size());
-    	sEdit.commit();
-    	}
-    	else
-    	{
-    		System.out.println("Inside else of sfrefs");
-    		sEdit.putString(selectedcard, selectedcard);
-    		sEdit.commit();
-    		sEdit.putInt("size",sPrefs.getAll().size());
-    		sEdit.commit();
-    		
-    	}
+    	if (sPrefs.getString(selectedcard, "0").equals("0")) {
+    		sEdit.putString(selectedcard, "1");
+        	sEdit.commit();
+		}else{
+			sEdit.putString(selectedcard, "0");
+        	sEdit.commit();
+		}
+    	
     	System.out.println(sPrefs.toString());
     	int size = sPrefs.getInt("size", 0);
     	System.out.println("size"+size);

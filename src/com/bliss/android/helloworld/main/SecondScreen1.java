@@ -107,11 +107,7 @@ public class SecondScreen1 extends Activity {
 		}
 		
 	
-		csvCardsView = new CardScrollView(this);
-        csaAdapter cvAdapter = new csaAdapter();
-        csvCardsView.setAdapter(cvAdapter);
-        csvCardsView.activate();
-        setContentView(csvCardsView);
+		
 	
 //}
 	
@@ -166,7 +162,7 @@ public class SecondScreen1 extends Activity {
 	            protected void onPostExecute(ArrayList<String> arr){       		
 	            	super.onPostExecute(arr);
 	            	finalview(arr);
-	     
+	            	
 	            }
 			   }
 			   
@@ -183,7 +179,12 @@ public class SecondScreen1 extends Activity {
 			 
 
 			}
-			
+			csvCardsView = new CardScrollView(this);
+            csaAdapter cvAdapter = new csaAdapter();
+            csvCardsView.setAdapter(cvAdapter);
+            csvCardsView.activate();
+            setContentView(csvCardsView);
+ 
 		}
 		
 	private class csaAdapter extends CardScrollAdapter
