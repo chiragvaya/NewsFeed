@@ -11,6 +11,8 @@
     <string name="read_aloud">Read Aloud</string>
      <string name="launch_newsfeed">Read News</string>
      <string name="subscribe">Subscribe</string>
+     <string name="share">Share</string>
+     <string name="openweb">Open Website</string>
     
 
 </resources>

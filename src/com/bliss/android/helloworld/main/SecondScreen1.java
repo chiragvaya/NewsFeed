@@ -30,7 +30,8 @@ import com.google.api.services.mirror.model.MenuItem;
 
 public class SecondScreen1 extends Activity {
 	String url;
-	String messageText;
+	
+	CardScrollView csvCardsView;
 	int size;
 	//Intent intent = new Intent(new GestureDetector.BaseListener(){}, Class<MenuActivity> ma);
 	private GestureDetector mGestureDetector;
@@ -41,6 +42,8 @@ public class SecondScreen1 extends Activity {
 	String sourcename;
 	private ArrayList<Card> newscard = new ArrayList<Card>();
     private ArrayList<String> newstext = new ArrayList<String>();
+    private ArrayList<String> newslink = new ArrayList<String>();
+    private ArrayList<String> messageText = new ArrayList<String>();
 	Card newcard;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +107,7 @@ public class SecondScreen1 extends Activity {
 		}
 		
 	
-		CardScrollView csvCardsView = new CardScrollView(this);
+		csvCardsView = new CardScrollView(this);
         csaAdapter cvAdapter = new csaAdapter();
         csvCardsView.setAdapter(cvAdapter);
         csvCardsView.activate();
@@ -143,6 +146,14 @@ public class SecondScreen1 extends Activity {
 
 	                newstext.add(nameList.item(0).getNodeValue());
 	                System.out.println(newstext.get(i));
+	                
+	                
+	                NodeList LinkList = ((org.w3c.dom.Element) fstElmnt).getElementsByTagName("link");
+	                Element LinkElement = (Element)LinkList.item(0);
+	                LinkList = ((Node) LinkElement).getChildNodes();
+
+	                newslink.add(LinkList.item(0).getNodeValue());
+	                System.out.println(newslink.get(i));
 	            
 	            }
 				   }
@@ -167,8 +178,9 @@ public class SecondScreen1 extends Activity {
 			Card newcard= new Card(this);
 			newcard.setText(ss.get(i));
 			 newscard.add(newcard);
+			 messageText.add(ss.get(i));
 			 mGestureDetector = createGestureDetector(this);
-			 messageText=ss.get(i);
+			 
 
 			}
 			
@@ -246,7 +258,8 @@ public class SecondScreen1 extends Activity {
 	                } 
 	                if (gesture == Gesture.LONG_PRESS) {
 	                	Intent intent = new Intent(SecondScreen1.this, MenuActivity.class);
-	                	//intent.putExtra("message", messageText);
+	                	intent.putExtra("message", messageText.get(csvCardsView.getSelectedItemPosition()));
+	                	intent.putExtra("link", newslink.get(csvCardsView.getSelectedItemPosition()));
 	                	startActivity(intent);
 	                	/*MenuActivity1 menus = new MenuActivity1()
 	                	  //.addNavigateAction()

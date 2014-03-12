@@ -4,5 +4,13 @@
     <item
         android:id="@+id/read_aloud_menu_item"
         android:title="@string/read_aloud"              
-        android:icon="@drawable/ic_reply_50" />                       
+        android:icon="@drawable/ic_reply_50" />  
+        <item
+        android:id="@+id/share"
+        android:title="@string/share"              
+        android:icon="@drawable/ic_reply_50" /> 
+        <item
+        android:id="@+id/openweb"
+        android:title="@string/openweb"              
+        android:icon="@drawable/ic_reply_50" />                     
 </menu>

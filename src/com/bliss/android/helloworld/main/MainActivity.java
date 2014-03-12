@@ -4,27 +4,22 @@ package com.bliss.android.helloworld.main;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
+import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.google.android.glass.app.Card;
 import com.google.android.glass.touchpad.Gesture;
 import com.google.android.glass.touchpad.GestureDetector;
 import com.google.android.glass.widget.CardScrollAdapter;
 import com.google.android.glass.widget.CardScrollView;
-import com.google.api.services.mirror.model.TimelineItem;
 
 public class MainActivity extends Activity {
 	CardScrollView csvCardsView;
@@ -32,25 +27,36 @@ public class MainActivity extends Activity {
 	String identifysource;
 	String selectedcard;
 	int cardindex;
-	//String subscribesource;
+	
 	Bundle intentfromaddSources;
 	Boolean sourceexists;
 	Boolean checkadd;
 	private static ArrayList<Card> sourceCard = new ArrayList<Card>();
-	private ArrayList<String> sourceText = new ArrayList<String>();
+	
 	public static ArrayList<String> subscribesource = new ArrayList<String>();
-	@SuppressWarnings("unchecked")
+	public static String PREF_NAME="pref";
+	private ArrayList<String> mlsText = new ArrayList<String>(Arrays.asList("Add Sources","PC World", "Tech Crunch","NPR", "BBC"));
+	Context context;
+	private SharedPreferences sPrefs;
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
         
-       
-        System.out.println(subscribesource);
-        //sourceText.add("add");
-       
-        System.out.println(subscribesource);
-       
+System.out.println("1st line of main");
+        sPrefs= getSharedPreferences(PREF_NAME,Activity.MODE_PRIVATE);
+        SharedPreferences.Editor sEdit=sPrefs.edit();
+        
+        sEdit.putString("Add Sources", "Add Sources");
+        sEdit.putInt("size", sPrefs.getAll().size());
+        sEdit.commit();
+        
+        
+        int sizeof=sPrefs.getInt("size",0);
+        System.out.println(sizeof);
+        
+        sPrefs.registerOnSharedPreferenceChangeListener(prefListener);
         
      	   //System.out.println(checkadd);
      	  //System.out.println("Contents of array:"+sourceText);
@@ -62,10 +68,11 @@ public class MainActivity extends Activity {
      	
         
         checkadd=subscribesource.contains("add");
-        if(checkadd==false)*/
-        if(subscribesource.contains("Add Sources")==false)
+        if(checkadd==false)
+        if(sPrefs.contains("Add Sources")==false)
         {
-        	subscribesource.add("Add Sources");
+        	sEdit.putString("Add Sources","Add Sources");
+        	//subscribesource.add("Add Sources");
         Card addsourcecard=new Card(this);
         addsourcecard.setText("Add Sources");
         sourceCard.add(addsourcecard);
@@ -73,7 +80,7 @@ public class MainActivity extends Activity {
         mGestureDetector = createGestureDetector(this);
      	 //sourceCard.add(addsourcecard);
         System.out.println(subscribesource);
-        /*
+        
         if (!(getIntent().getExtras().getStringArrayList("subscribesource")== null))
         		{
      	
@@ -104,6 +111,7 @@ public class MainActivity extends Activity {
         //Intent intent = new Intent(this, SecondActivity.class);
        // liveCard.setAction(PendingIntent.getActivity(this, 0, intent, 0));
        
+		
        csvCardsView = new CardScrollView(this);
        csaAdapter cvAdapter = new csaAdapter();
        csvCardsView.setAdapter(cvAdapter);
@@ -121,7 +129,22 @@ public class MainActivity extends Activity {
         
     }
 	
+	SharedPreferences.OnSharedPreferenceChangeListener prefListener = 
+	        new SharedPreferences.OnSharedPreferenceChangeListener() {
+	    public void onSharedPreferenceChanged(SharedPreferences prefs,
+	            String key) {
+	    	int sizeof=sPrefs.getInt("size",0);
+	    	for(int j=0;j<sizeof;j++)
+	        {
+	            if(subscribesource.contains(sPrefs.getString(mlsText.get(j),null))==false)     
+	        	subscribesource.add(sPrefs.getString(mlsText.get(j),null));
+	        }
+	        System.out.println("after adding"+subscribesource);
+	        createcards();
+	    }
+	};
 	
+	/*
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) 
 	{
 		if(requestCode==2)
@@ -131,38 +154,38 @@ public class MainActivity extends Activity {
 		
 		/*Card addsourcecard=new Card(this);
         addsourcecard.setText("add");
-     	 sourceCard.add(addsourcecard);*/
-		
+     	 sourceCard.add(addsourcecard);
+		ArrayHelper pref = new ArrayHelper(context);
 		
 		
         MainActivity.subscribesource=data.getStringArrayListExtra("subscribesource"); 
+        
+                 pref.saveArray(, subscribesource);
+       
+         pref.sEdit.putInt("size",subscribesource.size());
+         sEdit.commit();
         System.out.println("sources in onactivityresult"+subscribesource);
         //saveArray(null, subscribesource, null);
         
-        createcards();
-		csvCardsView = new CardScrollView(this);
-	       csaAdapter cvAdapter = new csaAdapter();
-	       csvCardsView.setAdapter(cvAdapter);
-	       csvCardsView.activate();
-	       setContentView(csvCardsView);
-	       //cvAdapter.getView(position, csvCardsView, );
-	      cardindex=csvCardsView.getSelectedItemPosition();
-	      mGestureDetector = createGestureDetector(this);
-		}
+        
+		
 			if (resultCode == RESULT_CANCELED) {    
 		         //Write your code if there's no result
 		     }
 		}
 	}
-	
+	}*/
 	
 	private void createcards()
 	{
 	 for(int i=0;i<subscribesource.size();i++)
      {
   	   System.out.println("create cards called");
+  	   
       Card card = new Card(this);
+      
       identifysource=subscribesource.get(i);
+      //identifysource=subscribesource.get(i);
       card.setText(identifysource);
       sourceCard.add(card);
       //card.setFootnote("blisstering");
@@ -299,15 +322,15 @@ public class MainActivity extends Activity {
 	                	{
 	                		System.out.println("Inside if of long press");
 	                		Intent intentforadd = new Intent(MainActivity.this,addsourcesactivity.class);
-	                		startActivityForResult(intentforadd,2);
+	                		startActivity(intentforadd);
 	                	}
 	                	else
 	                	{
-	                		selectedcard=subscribesource.get(csvCardsView.getSelectedItemPosition()-1);
+	                		
 	                		System.out.println("Inside else of long press");
 	                		Intent intent = new Intent(MainActivity.this, SecondScreen1.class);
 	                	intent.putExtra("sourcename",selectedcard);
-	                	intent.putExtra("size",subscribesource.size());
+	                	//intent.putExtra("size",subscribesource.size());
 	                	System.out.println(subscribesource.get(csvCardsView.getSelectedItemPosition()).toString());
 	                	startActivity(intent);
 	                	}
@@ -318,6 +341,7 @@ public class MainActivity extends Activity {
 	                else if (gesture == Gesture.SWIPE_DOWN) {
 	                	//Intent intent = new Intent(this, MenuActivity.class);
 	                	//startActivity(intent);
+	                	finish();
 	                    return true;
 	                } 
 	                else if (gesture == Gesture.LONG_PRESS) {
@@ -366,8 +390,10 @@ public class MainActivity extends Activity {
 	    public void onDestroy() {
 	       //sourceCard.shutdown();
 	        super.onDestroy();
-	        
+	        //sourceCard.clear();
 	       
 	    }
+	    
+	  
 }
    

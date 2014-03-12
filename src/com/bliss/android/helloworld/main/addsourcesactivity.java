@@ -2,9 +2,12 @@ package com.bliss.android.helloworld.main;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +20,6 @@ import com.google.android.glass.widget.CardScrollView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 
 public class addsourcesactivity extends Activity
@@ -27,19 +28,21 @@ public class addsourcesactivity extends Activity
 	CardScrollView csvCardsView;
 	Bundle sourcesadded;
 	String[] arraylistToArray = new String[4];
+	String selectedcard;
+	private ArrayList<String> subscribesource = new ArrayList<String>();
     private ArrayList<Card> mlcCards = new ArrayList<Card>();
     private ArrayList<String> mlsText = new ArrayList<String>(Arrays.asList("PC World", "Tech Crunch","NPR", "BBC"));
-    
+    public static SharedPreferences sPrefs ;
+    //= this.getSharedPreferences("com.bliss.android.helloworld.main", Context.MODE_PRIVATE);
     String source;
+    int sPrefsSize=0;
+    Context context;
     
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         System.out.println("Hello hello 1");
-        
-        
-
         
 
         for (int i = 0; i < mlsText.size(); i++)
@@ -62,7 +65,7 @@ public class addsourcesactivity extends Activity
 
     
     
-    
+    /*
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
     	 if (requestCode == 1)
@@ -75,6 +78,7 @@ public class addsourcesactivity extends Activity
     		 if(MainActivity.subscribesource.contains(source)==false)
     		 {
     			 MainActivity.subscribesource.add(source);
+    			 
     			
     		 }
     		 else
@@ -94,7 +98,7 @@ public class addsourcesactivity extends Activity
     	 mGestureDetector = createGestureDetector(this);
 
     
-    }
+    }*/
     
     
     
@@ -133,6 +137,74 @@ public class addsourcesactivity extends Activity
         }
     }
     
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+       
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        
+        inflater.inflate(R.menu.sourcesmenu, menu);
+    
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection.
+    	/*if(addedSources.contains(mlsText.get(getSourceindex))==false)
+    	{
+    	addedSources.add(mlsText.get(getSourceindex));
+    	}
+    	else
+    	{
+    	addedSources.remove(mlsText.get(getSourceindex));
+    	}*/
+    	System.out.println("onOptionsItemSelected");
+    	sPrefs= getSharedPreferences(MainActivity.PREF_NAME,Activity.MODE_PRIVATE);
+    	SharedPreferences.Editor sEdit=sPrefs.edit();
+    	selectedcard=mlsText.get(csvCardsView.getSelectedItemPosition());
+    	System.out.println(selectedcard);
+    	if(sPrefs.contains(selectedcard))
+    	{
+    		System.out.println("Inside if of sfrefs");
+    	sEdit.remove(selectedcard);
+    	sEdit.commit();
+    	sEdit.putInt("size",sPrefs.getAll().size());
+    	sEdit.commit();
+    	}
+    	else
+    	{
+    		System.out.println("Inside else of sfrefs");
+    		sEdit.putString(selectedcard, selectedcard);
+    		sEdit.commit();
+    		sEdit.putInt("size",sPrefs.getAll().size());
+    		sEdit.commit();
+    		
+    	}
+    	System.out.println(sPrefs.toString());
+    	int size = sPrefs.getInt("size", 0);
+    	System.out.println("size"+size);
+    	for(int j=0;j<size;j++)
+        {
+                  subscribesource.add(sPrefs.getString(mlsText.get(j),null));
+        }
+    	System.out.println(subscribesource);
+        return true;
+    }
+
+    @Override
+    public void onOptionsMenuClosed(Menu menu) {
+        // Nothing else to do, closing the activity.
+    	System.out.println("Menu closing.. intent to addsourcesactivity");
+    	
+        
+    }
+ 
+    
+    
     private GestureDetector createGestureDetector(Context context) {
 	    GestureDetector gestureDetector = new GestureDetector(context);
 	        //Create a base listener for generic gestures
@@ -148,9 +220,7 @@ public class addsourcesactivity extends Activity
 	                } 
 	                if (gesture == Gesture.LONG_PRESS) {
 	                	
-	                	Intent intent = new Intent(addsourcesactivity.this, addSourcesMenu.class);
-	                	intent.putExtra("sourceindex", csvCardsView.getSelectedItemPosition());
-	                	startActivityForResult(intent, 1);
+	                	 openOptionsMenu();
 	                	
 	                	
 	                    return true;
@@ -201,6 +271,8 @@ public class addsourcesactivity extends Activity
 		       
 		       
 		    }
+	    
+	    
     
     
 }

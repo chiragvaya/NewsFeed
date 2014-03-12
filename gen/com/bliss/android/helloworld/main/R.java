@@ -26,8 +26,10 @@ public final class R {
     }
     public static final class id {
         public static final int action_settings=0x7f090000;
+        public static final int openweb=0x7f090003;
         public static final int read_aloud_menu_item=0x7f090001;
-        public static final int subscribe=0x7f090002;
+        public static final int share=0x7f090002;
+        public static final int subscribe=0x7f090004;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -44,8 +46,10 @@ public final class R {
         public static final int app_name=0x7f060000;
         public static final int hello_world=0x7f060002;
         public static final int launch_newsfeed=0x7f060008;
+        public static final int openweb=0x7f06000b;
         public static final int read_aloud=0x7f060007;
         public static final int reply=0x7f060004;
+        public static final int share=0x7f06000a;
         public static final int source=0x7f060005;
         public static final int subscribe=0x7f060009;
         public static final int title_activity_second=0x7f060003;
