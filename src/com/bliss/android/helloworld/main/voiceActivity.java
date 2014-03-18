@@ -2,12 +2,10 @@ package com.bliss.android.helloworld.main;
 
 import java.util.Locale;
 
-import android.os.Bundle;
 import android.app.Activity;
-import android.content.SharedPreferences.Editor;
+import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 

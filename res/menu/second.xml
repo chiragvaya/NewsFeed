@@ -6,9 +6,13 @@
         android:title="@string/read_aloud"              
         android:icon="@drawable/ic_reply_50" />  
         <item
-        android:id="@+id/share"
-        android:title="@string/share"              
-        android:icon="@drawable/ic_reply_50" /> 
+    android:id="@+id/share"
+    android:orderInCategory="100"
+    android:showAsAction="never"
+    android:title="@string/share"/>
+                
+                
+               
         <item
         android:id="@+id/openweb"
         android:title="@string/openweb"              

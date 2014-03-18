@@ -16,16 +16,18 @@ import android.speech.tts.TextToSpeech.OnInitListener;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ShareActionProvider;
 
 public class MenuActivity extends Activity {
 	String data="Hello";
+	private ShareActionProvider mShareActionProvider;
 	String url;
 	private TextToSpeech mSpeech;
 	List<MenuItem> menus = new ArrayList<MenuItem>();
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-	    data = getIntent().getExtras().getString("message");
-	    url = getIntent().getExtras().getString("link");
+	    data = getIntent().getExtras().getString("desc");
+	    url = "http://www.forbes.com/sites/lizryan/2014/03/17/can-an-anti-social-person-get-hired/";
 	    System.out.println(data);
 	    mSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
 	    	
@@ -100,12 +102,14 @@ public class MenuActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.second, menu);
+        
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection.
+    	
         switch (item.getItemId()) {
             case R.id.read_aloud_menu_item:
             	System.out.println("goes itno read aloud case");
@@ -119,13 +123,20 @@ public class MenuActivity extends Activity {
                 
                 return true;
             case R.id.share:
-            	sharejson(item.getItemId());
-            	Intent in=new Intent(android.content.Intent.ACTION_SEND);
-            	in.setType("text/plain");
-            	in.putExtra(android.content.Intent.EXTRA_SUBJECT,"Subject test");
-            	in.putExtra(android.content.Intent.EXTRA_TEXT, "extra text that you want to put");
-            	startActivity(Intent.createChooser(in,"Share via"));
-            	return true;
+            	
+            	mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+            	//sharejson(item.getItemId());
+            	Intent in=new Intent(Intent.ACTION_SEND);
+            	
+            	in.setType("image/*");
+            	in.putExtra(Intent.EXTRA_TEXT, "Application.");
+            	//mShareActionProvider.setShareIntent(in);
+            	startActivity(Intent.createChooser(in, "Share via"));
+            	
+            	
+                return true;
+            	
+            	
             	
             case R.id.openweb:
             	openwebjson(item.getItemId());
@@ -134,6 +145,12 @@ public class MenuActivity extends Activity {
             	startActivity(i);
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+    
+    private void setShareIntent(Intent shareIntent) {
+        if (mShareActionProvider != null) {
+            mShareActionProvider.setShareIntent(shareIntent);
         }
     }
 

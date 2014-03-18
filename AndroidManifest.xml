@@ -36,6 +36,7 @@
             android:label="@string/title_activity_second1" 
             android:theme="@style/MenuTheme" >
              
+             
         </activity>
         <activity
             android:name="com.bliss.android.helloworld.main.MenuActivity1"
@@ -62,6 +63,8 @@
             android:theme="@style/MenuTheme" >
              
         </activity>
+        
+        
     </application>
 
 </manifest>

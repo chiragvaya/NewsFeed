@@ -36,7 +36,7 @@ public class MainActivity extends Activity {
 	public static ArrayList<String> subscribesource1;
 	public static String PREF_NAME = "pref";
 	private ArrayList<String> mlsText = new ArrayList<String>(Arrays.asList(
-			"PC World", "Tech Crunch", "NPR", "BBC", "Add Sources"));
+			"Forbes", "Tech Crunch", "NPR", "BBC", "Add Sources"));
 	Context context;
 	private SharedPreferences sPrefs;
 	private csaAdapter cvAdapter;
@@ -67,9 +67,9 @@ public class MainActivity extends Activity {
 			sEdit.putString("Add Sources", "1");
 			System.out.println("Add Sources added");
 		}
-		if (sPrefs.contains("PC World") == false) {
-			sEdit.putString("PC World", "0");
-			System.out.println("PC World added");
+		if (sPrefs.contains("Forbes") == false) {
+			sEdit.putString("Forbes", "0");
+			System.out.println("Forbes added");
 		}
 		if (sPrefs.contains("Tech Crunch") == false) {
 			sEdit.putString("Tech Crunch", "0");
@@ -86,64 +86,6 @@ public class MainActivity extends Activity {
 
 		sEdit.commit();
 
-		
-		
-		
-		// sPrefs.registerOnSharedPreferenceChangeListener(prefListener);
-
-		// System.out.println(checkadd);
-		// System.out.println("Contents of array:"+sourceText);
-
-		/*
-		 * Card addsourcecard=new Card(this);
-		 * addsourcecard.setText(sourceText.get(subscribesource.size()-1));
-		 * sourceCard.add(addsourcecard);
-		 * 
-		 * 
-		 * checkadd=subscribesource.contains("add"); if(checkadd==false)
-		 * if(sPrefs.contains("Add Sources")==false) {
-		 * sEdit.putString("Add Sources","Add Sources");
-		 * //subscribesource.add("Add Sources"); Card addsourcecard=new
-		 * Card(this); addsourcecard.setText("Add Sources");
-		 * sourceCard.add(addsourcecard); } mGestureDetector =
-		 * createGestureDetector(this); //sourceCard.add(addsourcecard);
-		 * System.out.println(subscribesource);
-		 * 
-		 * if (!(getIntent().getExtras().getStringArrayList("subscribesource")==
-		 * null)) {
-		 * 
-		 * }
-		 */
-
-		// System.out.println("Contents of array after add:"+sourceText);
-
-		/*
-		 * sourceexists = sourceText.contains(subscribesource);
-		 * 
-		 * if(sourceexists.equals(true)) sourceText.remove(subscribesource);
-		 * else sourceText.addFirst(subscribesource);
-		 */
-		// addsources = new Card(this);
-		// addsources.setText("Add Sources");
-
-		System.out.println(this);
-
-		// testing
-		// LiveCard liveCard = null;
-		// RemoteViews views = new RemoteViews(this.getPackageName(),
-		// R.layout.activity_main);
-		// liveCard.setViews(views);
-
-		// LiveCard liveCard;
-		// Intent intent = new Intent(this, SecondActivity.class);
-		// liveCard.setAction(PendingIntent.getActivity(this, 0, intent, 0));
-
-		
-//		csvCardsView.setAdapter(cvAdapter);
-//		csvCardsView.activate();
-//		setContentView(csvCardsView);
-		// cvAdapter.getView(position, csvCardsView, );
-		
 		mGestureDetector = createGestureDetector(this);
 
 		// cardindex=cvAdapter.findItemPosition(sourceCard);
@@ -160,7 +102,8 @@ public class MainActivity extends Activity {
 		subscribesource1.clear();
 		subscribesource.clear();
 		for (int j = 0; j < 5; j++) {
-			if (!subscribesource.contains(sPrefs.getString(mlsText.get(j), null)))
+			if (!subscribesource
+					.contains(sPrefs.getString(mlsText.get(j), null)))
 				subscribesource1.add(sPrefs.getString(mlsText.get(j), null));
 		}
 		System.out.println("this is subscribesource1" + subscribesource1);
@@ -179,31 +122,6 @@ public class MainActivity extends Activity {
 		setContentView(csvCardsView);
 	}
 
-	/*
-	 * protected void onActivityResult(int requestCode, int resultCode, Intent
-	 * data) { if(requestCode==2) { if(resultCode == RESULT_OK){
-	 * 
-	 * 
-	 * /*Card addsourcecard=new Card(this); addsourcecard.setText("add");
-	 * sourceCard.add(addsourcecard); ArrayHelper pref = new
-	 * ArrayHelper(context);
-	 * 
-	 * 
-	 * MainActivity.subscribesource=data.getStringArrayListExtra("subscribesource"
-	 * );
-	 * 
-	 * pref.saveArray(, subscribesource);
-	 * 
-	 * pref.sEdit.putInt("size",subscribesource.size()); sEdit.commit();
-	 * System.out.println("sources in onactivityresult"+subscribesource);
-	 * //saveArray(null, subscribesource, null);
-	 * 
-	 * 
-	 * 
-	 * if (resultCode == RESULT_CANCELED) { //Write your code if there's no
-	 * result } } } }
-	 */
-
 	private void createcards() {
 		for (int i = 0; i < subscribesource.size(); i++) {
 			System.out.println("create cards called");
@@ -211,7 +129,7 @@ public class MainActivity extends Activity {
 			Card card = new Card(this);
 
 			identifysource = subscribesource.get(i);
-			System.out.println("cardtext"+identifysource);
+			System.out.println("cardtext" + identifysource);
 			// identifysource=subscribesource.get(i);
 			card.setText(identifysource);
 			sourceCard.add(card);
@@ -220,36 +138,6 @@ public class MainActivity extends Activity {
 
 		}
 	}
-
-	/*
-	 * public boolean onKeyDown(int keycode, KeyEvent event) { if (keycode ==
-	 * KeyEvent.KEYCODE_DPAD_CENTER) { Log.e("Msg","What you have to print");
-	 * Intent intent = new Intent(this, SecondScreen1.class);
-	 * intent.putExtra("sourcename",identifysource); startActivity(intent);
-	 * return true; }
-	 * 
-	 * else return false; }
-	 */
-
-	/*
-	 * @Override public void onAttachedToWindow() { super.onAttachedToWindow();
-	 * 
-	 * }
-	 * 
-	 * @Override public boolean onCreateOptionsMenu(Menu menu) {
-	 * super.onCreateOptionsMenu(menu); MenuInflater inflater =
-	 * getMenuInflater(); inflater.inflate(R.menu.second, menu); return true; }
-	 * 
-	 * 
-	 * @Override public boolean onOptionsItemSelected(MenuItem item) { // Handle
-	 * item selection. Menu items typically start another // activity, start a
-	 * service, or broadcast another intent. /*switch (item.getItemId()) { case
-	 * R.id.; startActivity(new Intent(this, SecondActivity.class)); return
-	 * true; default: return super.onOptionsItemSelected(item); }
-	 * System.out.println("Success"); return true;
-	 * 
-	 * }
-	 */
 
 	private static class csaAdapter extends CardScrollAdapter {
 

@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="libs/google-api-client-json-1.2.2-alpha.jar"/>
 	<classpathentry kind="lib" path="libs/google-api-services-mirror-v1-rev40-1.17.0-rc.jar"/>
 	<classpathentry kind="lib" path="libs/google-api-client-1.17.0-rc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Chirag/Downloads/universal-image-loader-1.9.1-with-sources.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
