@@ -62,16 +62,31 @@ public class addsourcesactivity extends Activity {
 	}
 
 	private class csaAdapter extends CardScrollAdapter {
-		@Override
+		
+		 @Override
+	        public int getPosition(Object item) {
+	            return mlcCards.indexOf(item);
+	        }
 		public int findIdPosition(Object id) {
 			return -1;
 		}
 
-		@Override
 		public int findItemPosition(Object item) {
 			return mlcCards.indexOf(item);
 		}
+		@Override
+        public int getViewTypeCount() {
+            return Card.getViewTypeCount();
+        }
 
+        /**
+         * Returns the view type of this card so the system can figure out
+         * if it can be recycled.
+         */
+        @Override
+        public int getItemViewType(int position){
+            return mlcCards.get(position).getItemViewType();
+        }
 		@Override
 		public int getCount() {
 			return mlcCards.size();
@@ -84,7 +99,7 @@ public class addsourcesactivity extends Activity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			return mlcCards.get(position).toView();
+			return mlcCards.get(position).getView(convertView, parent);
 		}
 	}
 

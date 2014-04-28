@@ -59,7 +59,7 @@ public class SecondScreen1 extends Activity {
 	String getSource;
 	// String subscribesource;
 	String sourcename;
-	private ArrayList<View> newscard = new ArrayList<View>();
+	private ArrayList<Card> newscard = new ArrayList<Card>();
 	private ArrayList<String> newstext = new ArrayList<String>();
 	private ArrayList<String> newslink = new ArrayList<String>();
 	private ArrayList<String> newsimage = new ArrayList<String>();
@@ -191,11 +191,11 @@ public class SecondScreen1 extends Activity {
 	private void finalview(ArrayList<String> ss) {
 		for (int i = 0; i < ss.size(); i++) {
 			System.out.println(ss.get(i));
-			WebView newcard = new WebView(this);
-			//newcard.setText(ss.get(i));
+			Card newcard = new Card(this);
+			newcard.setText(ss.get(i));
 			//Uri myUri = Uri.parse(newsimage.get(i));
 			//newcard.addImage(myUri);
-			newcard.loadUrl("file:///android_res/html/try234.html");
+			//newcard.loadUrl("file:///android_res/html/try234.html");
 			newscard.add(newcard);
 			messageText.add(ss.get(i));
 			mGestureDetector = createGestureDetector(this);
@@ -210,12 +210,10 @@ public class SecondScreen1 extends Activity {
 	}
 
 	private class csaAdapter extends CardScrollAdapter {
-		@Override
 		public int findIdPosition(Object id) {
 			return -1;
 		}
 
-		@Override
 		public int findItemPosition(Object item) {
 			return newscard.indexOf(item);
 		}
@@ -232,7 +230,13 @@ public class SecondScreen1 extends Activity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			return newscard.get(position);
+			return newscard.get(position).getView(convertView, parent);
+		}
+
+		@Override
+		public int getPosition(Object item) {
+			// TODO Auto-generated method stub
+			return newscard.indexOf(item);
 		}
 	}
 

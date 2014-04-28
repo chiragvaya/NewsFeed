@@ -9,12 +9,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RemoteViews;
 
 import com.google.android.glass.app.Card;
+import com.google.android.glass.timeline.LiveCard;
+import com.google.android.glass.timeline.LiveCard.PublishMode;
 import com.google.android.glass.touchpad.Gesture;
 import com.google.android.glass.touchpad.GestureDetector;
 import com.google.android.glass.widget.CardScrollAdapter;
@@ -26,7 +28,7 @@ public class MainActivity extends Activity {
 	String identifysource;
 	String selectedcard;
 	int cardindex;
-
+	//private final FrameLayout mLayout;
 	Bundle intentfromaddSources;
 	Boolean sourceexists;
 	Boolean checkadd;
@@ -40,11 +42,21 @@ public class MainActivity extends Activity {
 	Context context;
 	private SharedPreferences sPrefs;
 	private csaAdapter cvAdapter;
+	LiveCard liveCard;
+	private static final String LIVE_CARD_ID = "Hello Hello";
 
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+    
+
+	
+		
 		sourceCard = new ArrayList<Card>();
+		
 		subscribesource = new ArrayList<String>();
 		subscribesource1 = new ArrayList<String>();
 		System.out.println("1st line of main");
@@ -120,18 +132,37 @@ public class MainActivity extends Activity {
 		csvCardsView.setAdapter(cvAdapter);
 		csvCardsView.activate();
 		setContentView(csvCardsView);
+		
+		
 	}
 
 	private void createcards() {
 		for (int i = 0; i < subscribesource.size(); i++) {
 			System.out.println("create cards called");
-
 			Card card = new Card(this);
-
+			//RelativeLayout layout = (RelativeLayout) findViewById(R.id.activity_main);
+			//TextView card;
+			//card = (TextView) layout.findViewById(R.id.settextview);
 			identifysource = subscribesource.get(i);
 			System.out.println("cardtext" + identifysource);
 			// identifysource=subscribesource.get(i);
 			card.setText(identifysource);
+			//card.setImageLayout(Card.ImageLayout.FULL);
+	        //card.addImage(R.drawable.download);
+			//setContentView(R.layout.activity_main);
+			//card = (TextView)findViewById(R.id.settextview);
+			
+			//LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+			//View view = inflater.inflate( R.layout.activity_main, null );
+			//View cardview = card.toView();
+			//LayoutInflater mInflater;
+			//mInflater = LayoutInflater.from(context);
+			//View newView = mInflater.inflate(R.layout.activity_main, null);
+			//setContentView(newView);
+			//LinearLayout layout=new LinearLayout(this);
+			//layout.addView(cardview);
+			//layout.setGravity(Gravity.CENTER);
+			
 			sourceCard.add(card);
 			// card.setFootnote("blisstering");
 			// setContentView(card.toView());
@@ -158,7 +189,14 @@ public class MainActivity extends Activity {
 		}
 
 		public View getView(int position, View convertView, ViewGroup parent) {
-			return sourceCard.get(position).toView();
+			return sourceCard.get(position).getView(convertView, parent);
+			
+		}
+
+		@Override
+		public int getPosition(Object item) {
+			// TODO Auto-generated method stub
+			return sourceCard.indexOf(item);
 		}
 	}
 
@@ -267,9 +305,9 @@ public class MainActivity extends Activity {
 		return gestureDetector;
 	}
 
-	/*
-	 * Send generic motion events to the gesture detector
-	 */
+	
+	 // Send generic motion events to the gesture detector
+	 
 	@Override
 	public boolean onGenericMotionEvent(MotionEvent event) {
 		if (mGestureDetector != null) {
@@ -285,4 +323,5 @@ public class MainActivity extends Activity {
 
 	}
 
+		
 }

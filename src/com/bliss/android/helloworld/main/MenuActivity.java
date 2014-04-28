@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ public class MenuActivity extends Activity {
 	String data="Hello";
 	private ShareActionProvider mShareActionProvider;
 	String url;
+	int result;
 	private TextToSpeech mSpeech;
 	List<MenuItem> menus = new ArrayList<MenuItem>();
 	public void onCreate(Bundle savedInstanceState) {
@@ -31,10 +33,14 @@ public class MenuActivity extends Activity {
 	    System.out.println(data);
 	    mSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
 	    	
-	        @Override
 	        public void onInit(int status) {
-	            // Do nothing.
-	        }
+if(status == TextToSpeech.SUCCESS)
+	result=mSpeech.setLanguage(Locale.US);	
+if(result==TextToSpeech.LANG_MISSING_DATA ||
+result==TextToSpeech.LANG_NOT_SUPPORTED){
+Log.e("error", "This Language is not supported");
+}
+	}
 	    });
 	}
 	
@@ -114,24 +120,36 @@ public class MenuActivity extends Activity {
             case R.id.read_aloud_menu_item:
             	System.out.println("goes itno read aloud case");
             	System.out.println(item.getItemId());
-            	mSpeech.speak(data, TextToSpeech.QUEUE_FLUSH, null);
+            	System.out.println(data);
+            	System.out.println(TextToSpeech.ERROR);
+            	
+            	mSpeech.speak("Hello, this is a sample data", TextToSpeech.QUEUE_FLUSH, null);
             	
             	
             	//mSpeech.speak("Hello how are you", TextToSpeech.QUEUE_FLUSH, null);
-            	mSpeech.setLanguage(Locale.US);
-                System.out.println(item.getItemId());
+            	
+                
                 
                 return true;
             case R.id.share:
             	
-            	mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+               	/*mShareActionProvider = (ShareActionProvider) item.getActionProvider();
             	//sharejson(item.getItemId());
             	Intent in=new Intent(Intent.ACTION_SEND);
             	
             	in.setType("image/*");
-            	in.putExtra(Intent.EXTRA_TEXT, "Application.");
+            	in.putExtra(Intent.EXTRA_TEXT, "This is the text to be shared");
             	//mShareActionProvider.setShareIntent(in);
             	startActivity(Intent.createChooser(in, "Share via"));
+            	*/
+            	
+            	
+            	String message = "Text I wan't to share.";
+            	Intent share = new Intent(Intent.ACTION_SEND);
+            	share.setType("text/plain");
+            			share.putExtra(Intent.EXTRA_TEXT, message);
+
+            			startActivity(Intent.createChooser(share, "Title of the dialog the system will open"));
             	
             	
                 return true;
